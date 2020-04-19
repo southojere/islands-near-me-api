@@ -24,7 +24,7 @@
   },
   "scripts": {
     "heroku-postbuild": "tsc",
-    "start": "node --exec ts-node src/index.ts",
+    "start": "node dist/index.js",
     "start:dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc"
   }
