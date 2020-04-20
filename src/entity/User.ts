@@ -1,16 +1,29 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { ObjectType, Field, ID, Root } from "type-graphql";
+import { IsEmail } from "class-validator";
 
 @Entity()
-export class User {
+@ObjectType()
+export class User extends BaseEntity {
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Field()
   @Column()
-  firstName: string;
+  username: string;
 
+  @Field()
   @Column()
-  lastName: string;
+  @IsEmail()
+  email: string;
 
+  @Field()
   @Column()
-  age: number;
+  password: string;
+
+  @Field()
+  uppercaseEmail(@Root() parent: User): string {
+    return parent.email.toUpperCase();
+  }
 }
