@@ -14,6 +14,8 @@ import { HelloWorldResolver } from "./resolvers/HelloWorldResolver";
   await createConnection({ ...options, name: "default" });
 
   const apolloServer = new ApolloServer({
+    introspection: true,
+    playground: true,
     schema: await buildSchema({
       resolvers: [HelloWorldResolver],
       validate: true
