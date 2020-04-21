@@ -1,26 +1,19 @@
-import { Query, Resolver, Mutation, Arg } from "type-graphql";
-import bcrypt from "bcryptjs";
+import { Query, Resolver, Mutation, Arg, Authorized } from "type-graphql";
 import { User } from "../../entity/User";
 import { RegisterInput } from "./InputTypes/RegisterInput";
+import { createUser } from "../../entity/commands/user";
 
 @Resolver()
 export class RegisterResolver {
   @Query(() => [User])
+  @Authorized()
   users() {
     return User.find();
   }
 
   @Mutation(() => User)
   async signUp(@Arg("input") input: RegisterInput): Promise<User> {
-    const { email, password, username } = input;
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    const user = new User();
-    user.email = email;
-    user.password = hashedPassword;
-    user.username = username;
-    await User.save(user);
-
-    return user;
+    const newUser = await createUser(input);
+    return newUser;
   }
 }

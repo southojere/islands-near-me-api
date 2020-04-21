@@ -41,14 +41,13 @@ import config from "./config";
     introspection: true,
     playground: true,
     schema: await buildSchema({
-      resolvers: [
-        RegisterResolver,
-        LoginResolver,
-        MeResolver
-      ],
+      resolvers: [RegisterResolver, LoginResolver, MeResolver],
       validate: true,
-      authChecker: () => {
-        return true; // TODO: add auth checker logic
+      authChecker: ({ context }) => {
+        const user = context.user;
+        if (!user) return false;
+        // TODO add more custom auth logic here
+        return true;
       }
     }),
     context: ({ req, res }: any) => {
