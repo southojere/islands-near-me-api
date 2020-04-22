@@ -5,6 +5,7 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 import { RegisterResolver } from "./resolvers/user/Register";
 import { LoginResolver } from "./resolvers/user/Login";
@@ -15,6 +16,11 @@ import config from "./config";
 
 (async () => {
   const app = express();
+  var corsOptions = {
+    origin: "*",
+    credentials: true
+  };
+  app.use(cors(corsOptions));
 
   const options = await getConnectionOptions(
     process.env.NODE_ENV || "development"
@@ -24,7 +30,14 @@ import config from "./config";
   app.use(cookieParser());
 
   const addUser = async (req: any, _: any, next: any) => {
-    const accessToken = req.cookies["access-token"];
+    let accessToken = req.headers.authorization
+      ? req.headers.authorization.split(" ")[1] // remove 'Bearer'
+      : null;
+    const accessTokenViaCookie = req.cookies["access-token"];
+    if (accessTokenViaCookie) {
+      console.log("[AuthCheck] Found accessToken via cookie");
+      accessToken = accessTokenViaCookie;
+    }
     if (accessToken) {
       try {
         const { userId }: any = jwt.verify(accessToken, config.auth.secret);
