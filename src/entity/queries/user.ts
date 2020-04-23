@@ -4,8 +4,15 @@ const findUserById = (id: number) => {
   return User.findOne({
     where: {
       id
-    }
+    },
+    relations: ["session"]
   });
 };
 
-export { findUserById };
+const findAllUsers = () => {
+  return User.find({
+    relations: ["session"]
+  });
+};
+
+export { findUserById, findAllUsers };
