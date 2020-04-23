@@ -11,6 +11,8 @@ import { RegisterResolver } from "./resolvers/user/Register";
 import { LoginResolver } from "./resolvers/user/Login";
 import { MeResolver } from "./resolvers/user/Me";
 
+import { SessionResolver } from "./resolvers/Session";
+
 import { findUserById } from "./entity/queries/user";
 import config from "./config";
 
@@ -21,7 +23,6 @@ import config from "./config";
     credentials: true
   };
   app.use(cors(corsOptions));
-
   const options = await getConnectionOptions(
     process.env.NODE_ENV || "development"
   );
@@ -54,7 +55,7 @@ import config from "./config";
     introspection: true,
     playground: true,
     schema: await buildSchema({
-      resolvers: [RegisterResolver, LoginResolver, MeResolver],
+      resolvers: [RegisterResolver, LoginResolver, MeResolver, SessionResolver],
       validate: true,
       authChecker: ({ context }) => {
         const user = context.user;
