@@ -6,14 +6,14 @@ import {
   Field,
   Arg,
   Ctx,
-//   ObjectType
+  Int
+  //   ObjectType
 } from "type-graphql";
 import { Session } from "../entity/Session";
-import { findAllSessions } from "../entity/queries/session";
-import { createSession } from "../entity/commands/session";
+import { findAllSessions, findSessionById } from "../entity/queries/session";
+import { createSession, deleteSessionById } from "../entity/commands/session";
 import { findUserById } from "../entity/queries/user";
 import { AuthenticationError } from "apollo-server-core";
-
 
 @InputType()
 class SessionInput {
@@ -43,19 +43,35 @@ export class SessionResolver {
   @Query(() => [Session])
   async listSessions() {
     const [sessions] = await findAllSessions();
-    console.log(sessions)
     return sessions;
   }
 
   @Mutation(() => Session)
   async createSession(@Ctx() ctx: any, @Arg("input") input: SessionInput) {
     const { user } = ctx;
-    if (!user)
+    if (!user) {
       throw new AuthenticationError("User not found - cant create session");
+    }
     const userModel = await findUserById(user.id);
     if (!userModel)
       throw new AuthenticationError("User not found - cant create session");
     const session = await createSession(userModel.id, input);
     return session;
+  }
+
+  @Mutation(() => Boolean)
+  async deleteSession(@Ctx() ctx: any, @Arg("id", () => Int) id: number) {
+    const { user } = ctx;
+    if (!user) {
+      throw new AuthenticationError("User not found - cant delete session");
+    }
+    const session = await findSessionById(id);
+    if (!session) throw new Error(`Could not find session (${id})`);
+    
+    if (session.hostId !== user.id) {
+      throw new Error(`Can't remove a session that isn't yours`);
+    }
+
+    return deleteSessionById(session);
   }
 }

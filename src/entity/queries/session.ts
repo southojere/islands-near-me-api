@@ -4,7 +4,12 @@ const findAllSessions = () => {
   return Session.findAndCount({});
 };
 
+const findSessionById = (id: number) => {
+  return Session.findOne({
+    where: {
+      id
+    }
+  });
+};
 
-export {
-    findAllSessions
-}
+export { findAllSessions, findSessionById };
