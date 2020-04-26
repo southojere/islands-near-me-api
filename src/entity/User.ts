@@ -37,16 +37,14 @@ export class User extends BaseEntity {
     return parent.email.toUpperCase();
   }
 
-  @OneToOne(() => Session)
+  @OneToOne(() => Session, { nullable: true })
   @JoinColumn()
   @Field({ nullable: true })
   session: Session;
 
-
   @CreateDateColumn()
   @Field()
   createdAt: string;
-
 
   @UpdateDateColumn()
   @Field()

@@ -37,15 +37,13 @@ import config from "./config";
     const accessTokenViaCookie = req.cookies["access-token"];
     if (accessTokenViaCookie) {
       console.log("[AuthCheck] Found accessToken via cookie");
-      console.log(accessTokenViaCookie);
-      accessToken = accessTokenViaCookie;
     }
     if (accessToken) {
-      console.log(accessToken);
       try {
+        console.log(`finding user...`);
         const { userId }: any = jwt.verify(accessToken, config.auth.secret);
+        console.log(`user ID:=`, userId);
         const user = await findUserById(userId);
-        console.log(user)
         req.user = user;
       } catch (err) {}
     }

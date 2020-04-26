@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Arg, Ctx } from "type-graphql";
+import { Resolver, Mutation, Arg, Ctx, ObjectType, Field } from "type-graphql";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -6,14 +6,23 @@ import { User } from "../../entity/User";
 import { GraphQLError } from "graphql";
 import config from "../../config";
 
+@ObjectType()
+class LoginObject {
+  @Field()
+  user: User;
+
+  @Field()
+  accessToken: string;
+}
+
 @Resolver()
 export class LoginResolver {
-  @Mutation(() => User)
+  @Mutation(() => LoginObject)
   async login(
     @Arg("username") username: string,
     @Arg("password") password: string,
-    @Ctx() ctx:any,
-  ): Promise<User> {
+    @Ctx() ctx: any
+  ): Promise<LoginObject> {
     const user = await User.findOne({
       where: {
         username
@@ -36,9 +45,7 @@ export class LoginResolver {
         expiresIn: "100d"
       }
     );
-
-    ctx.res.cookie('access-token',token);
-
-    return user;
+    ctx.res.cookie("access-token", token);
+    return { user, accessToken: token };
   }
 }

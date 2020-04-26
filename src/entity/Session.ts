@@ -5,7 +5,9 @@ import {
   BaseEntity,
   CreateDateColumn
 } from "typeorm";
-import { ObjectType, Field, ID } from "type-graphql";
+import { ObjectType, Field, ID, Root } from "type-graphql";
+import { findUserById } from "./queries/user";
+import { User } from "./User";
 
 @Entity()
 @ObjectType()
@@ -14,13 +16,12 @@ export class Session extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-
   @Field()
   @Column()
   dodoCode: string;
 
-  @Field({nullable: true})
-  @Column({nullable: true})
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   note: string;
 
   @Field()
@@ -31,17 +32,14 @@ export class Session extends BaseEntity {
   @Column()
   longitude: string;
 
-
   @Field()
   @Column()
   hostId: number;
-//   @Field()
-//   latlong(@Root() parent: Session):  {
-//     return {
-//       lat: parent.latitude,
-//       long: parent.longitude
-//     };
-//   }
+
+  @Field(() => User)
+  host(@Root() parent: Session): Promise<User | undefined> {
+    return findUserById(parent.hostId);
+  }
 
   @CreateDateColumn()
   @Field()
