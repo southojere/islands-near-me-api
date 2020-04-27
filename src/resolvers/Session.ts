@@ -6,7 +6,8 @@ import {
   Field,
   Arg,
   Ctx,
-  Int
+  Int,
+  ObjectType
   //   ObjectType
 } from "type-graphql";
 import { Session } from "../entity/Session";
@@ -30,20 +31,36 @@ class SessionInput {
   longitude: string;
 }
 
-// @ObjectType()
-// class PaginatedSessions extends BaseEntity {
-//   @Field()
-//   total: number;
-//   @Field()
-//   sessions: any;
-// }
+@InputType()
+export class SessionSearchInput {
+  @Field(() => Int, { nullable: true })
+  skip: number;
+
+  @Field(() => Int, { nullable: true })
+  limit: number;
+
+  @Field({ nullable: true })
+  keyword: string;
+
+  @Field({ nullable: true })
+  searchType: string;
+}
+
+@ObjectType()
+class PaginatedSessions {
+  @Field()
+  total: number;
+
+  @Field(() => [Session])
+  sessions: Session[];
+}
 
 @Resolver()
 export class SessionResolver {
-  @Query(() => [Session])
-  async listSessions() {
-    const [sessions] = await findAllSessions();
-    return sessions;
+  @Query(() => PaginatedSessions)
+  async listSessions(@Arg("filter") filter: SessionSearchInput): Promise<any> {
+    const [sessions, total] = await findAllSessions(filter);
+    return { sessions, total };
   }
 
   @Mutation(() => Session)
@@ -67,7 +84,7 @@ export class SessionResolver {
     }
     const session = await findSessionById(id);
     if (!session) throw new Error(`Could not find session (${id})`);
-    
+
     if (session.hostId !== user.id) {
       throw new Error(`Can't remove a session that isn't yours`);
     }
