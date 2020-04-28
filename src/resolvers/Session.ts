@@ -67,7 +67,7 @@ export class SessionResolver {
   async createSession(@Ctx() ctx: any, @Arg("input") input: SessionInput) {
     const { user } = ctx;
     if (!user) {
-      throw new AuthenticationError("User not found - cant create session");
+      throw new AuthenticationError("Please login to create a session");
     }
     const userModel = await findUserById(user.id);
     if (!userModel)

@@ -3,7 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
-  CreateDateColumn
+  CreateDateColumn,
+  OneToOne,
+  JoinColumn
 } from "typeorm";
 import { ObjectType, Field, ID, Root } from "type-graphql";
 import { findUserById } from "./queries/user";
@@ -35,6 +37,11 @@ export class Session extends BaseEntity {
   @Field()
   @Column()
   hostId: number;
+
+  @OneToOne(() => User)
+  @JoinColumn()
+  user: User;
+
 
   @Field(() => User)
   host(@Root() parent: Session): Promise<User | undefined> {

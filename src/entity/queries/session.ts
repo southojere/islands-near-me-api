@@ -1,6 +1,6 @@
 import { Session } from "../Session";
 import { SessionSearchInput } from "../../resolvers/Session";
-import { Like } from "typeorm";
+import { Like, getConnection } from "typeorm";
 
 const findAllSessions = ({
   keyword,
@@ -9,19 +9,29 @@ const findAllSessions = ({
   skip
 }: SessionSearchInput) => {
   console.log(searchType);
-  const where:any = {}
 
-  if(keyword) {
-      where.dodoCode = Like(`%${keyword}%`);
-  }
-  return Session.findAndCount({
-    order: {
-      id: "ASC"
-    },
-    where,
-    skip: skip || 0,
-    take: limit || 20
-  });
+  return getConnection()
+    .getRepository(Session)
+    .createQueryBuilder("session")
+    .leftJoinAndSelect("session.user", "user")
+    .where(keyword ? `session.dodoCode ILIKE '%${keyword}%'` : '')
+    .orWhere(keyword ? `user.username ILIKE '%${keyword}%'` : '')
+    .take(limit || 20)
+    .skip(skip || 0)
+    .printSql()
+    .getManyAndCount();
+
+  //   return Session.findAndCount({
+  //     order: {
+  //       id: "ASC"
+  //     },
+  //     where,
+  //     skip: skip || 0,
+  //     take: limit || 20,
+  //     join: {
+  //       alias: "user"
+  //     }
+  //   });
 };
 
 const findSessionById = (id: number) => {
