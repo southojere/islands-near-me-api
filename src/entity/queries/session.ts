@@ -1,6 +1,6 @@
 import { Session } from "../Session";
 import { SessionSearchInput } from "../../resolvers/Session";
-import { Like, getConnection } from "typeorm";
+import { getConnection } from "typeorm";
 
 const findAllSessions = ({
   keyword,
