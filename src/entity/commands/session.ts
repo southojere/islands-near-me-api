@@ -28,7 +28,8 @@ const createSession = async (userId: number, input: ISessionInput) => {
     latitude: input.latitude,
     longitude: input.longitude,
     note: input.note,
-    dodoCode: input.dodoCode
+    dodoCode: input.dodoCode,
+    user: user,
   }).save();
 
   user.session = newSession;
