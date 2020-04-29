@@ -8,7 +8,6 @@ import {
   Ctx,
   Int,
   ObjectType
-  //   ObjectType
 } from "type-graphql";
 import { Session } from "../entity/Session";
 import { findAllSessions, findSessionById } from "../entity/queries/session";
@@ -44,6 +43,15 @@ export class SessionSearchInput {
 
   @Field({ nullable: true })
   searchType: string;
+
+  @Field(() => Int, { nullable: true, defaultValue: 25 })
+  nearMeRadius: number;
+
+  @Field({ nullable: true })
+  latitude: string;
+
+  @Field({ nullable: true })
+  longitude: string;
 }
 
 @ObjectType()

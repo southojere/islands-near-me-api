@@ -198,6 +198,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/geopoint@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/geopoint/-/geopoint-1.0.0.tgz#264eda9a2878aae4f0b4355771d9b4fcbeb9b793"
+  integrity sha512-efW4exVUOvRf6EMggaY8UcXJr8JWSUMsDCVSPJglr6Vj1jaebDVSbLjZUpyZf3/AToK1mkF/H0zAtRxu4nTJyg==
+
 "@types/glob@^7.1.1":
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/@types/glob/-/glob-7.1.1.tgz#aa59a1c6e3fbc421e07ccd31a944c30eba521575"
@@ -1404,6 +1409,11 @@ gauge@~2.7.3:
     string-width "^1.0.1"
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
+
+geopoint@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/geopoint/-/geopoint-1.0.1.tgz#08db0048b4cb935badd5f9a2c0b2e207ca4b7f24"
+  integrity sha1-CNsASLTLk1ut1fmiwLLiB8pLfyQ=
 
 get-caller-file@^2.0.1:
   version "2.0.5"
