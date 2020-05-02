@@ -45,17 +45,6 @@ const findAllSessions = async ({
       .printSql()
       .getManyAndCount();
   }
-  //   return Session.findAndCount({
-  //     order: {
-  //       id: "ASC"
-  //     },
-  //     where,
-  //     skip: skip || 0,
-  //     take: limit || 20,
-  //     join: {
-  //       alias: "user"
-  //     }
-  //   });
 };
 
 const findSessionById = (id: number) => {
@@ -66,4 +55,12 @@ const findSessionById = (id: number) => {
   });
 };
 
-export { findAllSessions, findSessionById };
+const findUsersSession = (userId: number) => {
+  return Session.findOne({
+    where: {
+      hostId: userId
+    }
+  });
+};
+
+export { findAllSessions, findSessionById, findUsersSession };

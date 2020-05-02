@@ -4,7 +4,7 @@ import { findUserById } from "../../entity/queries/user";
 
 @Resolver()
 export class MeResolver {
-  @Query(() => User)
+  @Query(() => User, { nullable: true })
   async me(@Ctx() ctx: any): Promise<User | undefined | null> {
     const user = ctx.user;
     if (!user) return null;

@@ -16,6 +16,8 @@ import { SessionResolver } from "./resolvers/Session";
 import { findUserById } from "./entity/queries/user";
 import config from "./config";
 
+import './handlers/crons'
+
 (async () => {
   const app = express();
   var corsOptions = {
