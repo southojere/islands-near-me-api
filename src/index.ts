@@ -12,11 +12,12 @@ import { LoginResolver } from "./resolvers/user/Login";
 import { MeResolver } from "./resolvers/user/Me";
 
 import { SessionResolver } from "./resolvers/Session";
+import { FeedbackResolver } from "./resolvers/Feedback";
 
 import { findUserById } from "./entity/queries/user";
 import config from "./config";
 
-import './handlers/crons'
+import "./handlers/crons";
 
 (async () => {
   const app = express();
@@ -58,7 +59,13 @@ import './handlers/crons'
     introspection: true,
     playground: true,
     schema: await buildSchema({
-      resolvers: [RegisterResolver, LoginResolver, MeResolver, SessionResolver],
+      resolvers: [
+        RegisterResolver,
+        LoginResolver,
+        MeResolver,
+        SessionResolver,
+        FeedbackResolver
+      ],
       validate: true,
       authChecker: ({ context }) => {
         const user = context.user;

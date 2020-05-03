@@ -6,11 +6,13 @@ import {
   OneToOne,
   JoinColumn,
   UpdateDateColumn,
-  CreateDateColumn
+  CreateDateColumn,
+  OneToMany
 } from "typeorm";
 import { ObjectType, Field, ID, Root } from "type-graphql";
 import { IsEmail } from "class-validator";
 import { Session } from "./Session";
+import { Feedback } from "./Feedback";
 
 @Entity()
 @ObjectType()
@@ -41,6 +43,9 @@ export class User extends BaseEntity {
   @JoinColumn()
   @Field({ nullable: true })
   session: Session;
+
+  @OneToMany(() => Feedback, feedback => feedback.user)
+  feedback: Feedback[];
 
   @CreateDateColumn()
   @Field()
