@@ -16,7 +16,7 @@ import { findUserById } from "../entity/queries/user";
 import { AuthenticationError } from "apollo-server-core";
 
 @InputType()
-class SessionInput {
+export class SessionInput {
   @Field({ nullable: true })
   note: string;
 
@@ -28,6 +28,21 @@ class SessionInput {
 
   @Field()
   longitude: string;
+
+  @Field({ defaultValue: false })
+  hasRedd: boolean;
+  @Field({ defaultValue: false })
+  hasLeif: boolean;
+  @Field({ defaultValue: false })
+  hasCJ: boolean;
+  @Field({ defaultValue: false })
+  hasFlick: boolean;
+  @Field({ defaultValue: false })
+  hasKicks: boolean;
+  @Field({ defaultValue: false })
+  hasSaharah: boolean;
+  @Field({ defaultValue: false })
+  hasCeleste: boolean;
 }
 
 @InputType()
@@ -52,6 +67,9 @@ export class SessionSearchInput {
 
   @Field({ nullable: true })
   longitude: string;
+
+  @Field({ nullable: true })
+  visitor: number;
 }
 
 @ObjectType()

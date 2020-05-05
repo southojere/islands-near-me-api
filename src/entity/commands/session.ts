@@ -2,15 +2,10 @@ import { Session } from "../../entity/Session";
 import { findUserById } from "../queries/user";
 import { getConnection } from "typeorm";
 import { User } from "../User";
+import { SessionInput } from "../../resolvers/Session";
 
-interface ISessionInput {
-  note?: string;
-  dodoCode: string;
-  latitude: string;
-  longitude: string;
-}
 
-const createSession = async (userId: number, input: ISessionInput) => {
+const createSession = async (userId: number, input: SessionInput) => {
   const existingSession = await Session.findOne({
     where: {
       hostId: userId
@@ -29,6 +24,13 @@ const createSession = async (userId: number, input: ISessionInput) => {
     longitude: input.longitude,
     note: input.note,
     dodoCode: input.dodoCode,
+    hasCJ: input.hasCJ,
+    hasCeleste: input.hasCeleste,
+    hasFlick: input.hasFlick,
+    hasKicks: input.hasKicks,
+    hasLeif: input.hasLeif,
+    hasSaharah: input.hasSaharah,
+    hasRedd: input.hasRedd,
     user: user,
   }).save();
 

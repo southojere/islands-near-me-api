@@ -42,6 +42,33 @@ export class Session extends BaseEntity {
   @JoinColumn()
   user: User;
 
+  @Field({ defaultValue: false })
+  @Column({ default: false })
+  hasCeleste: boolean;
+
+  @Field({ defaultValue: false })
+  @Column({ default: false })
+  hasSaharah: boolean;
+
+  @Field({ defaultValue: false })
+  @Column({ default: false })
+  hasKicks: boolean;
+
+  @Field({ defaultValue: false })
+  @Column({ default: false })
+  hasFlick: boolean;
+
+  @Field({ defaultValue: false })
+  @Column({ default: false })
+  hasCJ: boolean;
+
+  @Field({ defaultValue: false })
+  @Column({ default: false })
+  hasLeif: boolean;
+
+  @Field({ defaultValue: false })
+  @Column({ default: false })
+  hasRedd: boolean;
 
   @Field(() => User)
   host(@Root() parent: Session): Promise<User | undefined> {

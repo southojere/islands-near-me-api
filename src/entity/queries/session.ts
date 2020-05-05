@@ -1,16 +1,16 @@
+import Geopoint from "geopoint";
 import { Session } from "../Session";
 import { SessionSearchInput } from "../../resolvers/Session";
-import { getConnection } from "typeorm";
-import Geopoint from "geopoint";
+import { getSessionVisitorWhere } from "../../utils";
 
 const findAllSessions = async ({
-  keyword,
   limit,
   searchType,
   skip,
   nearMeRadius,
   latitude,
-  longitude
+  longitude,
+  visitor
 }: SessionSearchInput) => {
   if (searchType === "NEARME") {
     if (!latitude || !longitude)
@@ -34,16 +34,18 @@ const findAllSessions = async ({
     });
     return [sessionsNearMe, sessionsNearMe.length];
   } else {
-    return getConnection()
-      .getRepository(Session)
-      .createQueryBuilder("session")
-      .leftJoinAndSelect("session.user", "user")
-      .where(keyword ? `session.dodoCode ILIKE '%${keyword}%'` : "")
-      .orWhere(keyword ? `user.username ILIKE '%${keyword}%'` : "")
-      .take(limit || 20)
-      .skip(skip || 0)
-      .printSql()
-      .getManyAndCount();
+    const where: any = {};
+    if (visitor) {
+      where[getSessionVisitorWhere(visitor)] = true;
+    }
+    return Session.findAndCount({
+      relations: ["user"],
+      where: {
+        ...where
+      },
+      take: limit || 20,
+      skip: skip || 0
+    });
   }
 };
 
