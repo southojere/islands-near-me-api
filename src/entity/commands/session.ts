@@ -1,9 +1,8 @@
 import { Session } from "../../entity/Session";
 import { findUserById } from "../queries/user";
-import { getConnection } from "typeorm";
+import { getConnection, getManager } from "typeorm";
 import { User } from "../User";
 import { SessionInput } from "../../resolvers/Session";
-
 
 const createSession = async (userId: number, input: SessionInput) => {
   const existingSession = await Session.findOne({
@@ -31,7 +30,7 @@ const createSession = async (userId: number, input: SessionInput) => {
     hasLeif: input.hasLeif,
     hasSaharah: input.hasSaharah,
     hasRedd: input.hasRedd,
-    user: user,
+    user: user
   }).save();
 
   user.session = newSession;
@@ -56,4 +55,11 @@ const deleteSessionById = async (session: Session) => {
   return true;
 };
 
-export { createSession, deleteSessionById };
+const toggleSessionFull = async (session: Session) => {
+  const manager = getManager();
+  session.isFull = !session.isFull;
+  await manager.save(session);
+  return session;
+};
+
+export { createSession, deleteSessionById, toggleSessionFull };

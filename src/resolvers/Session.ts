@@ -11,7 +11,7 @@ import {
 } from "type-graphql";
 import { Session } from "../entity/Session";
 import { findAllSessions, findSessionById } from "../entity/queries/session";
-import { createSession, deleteSessionById } from "../entity/commands/session";
+import { createSession, deleteSessionById, toggleSessionFull } from "../entity/commands/session";
 import { findUserById } from "../entity/queries/user";
 import { AuthenticationError } from "apollo-server-core";
 
@@ -116,5 +116,22 @@ export class SessionResolver {
     }
 
     return deleteSessionById(session);
+  }
+
+
+  @Mutation(() => Session)
+  async toggleSessionFull(@Ctx() ctx: any, @Arg("id", () => Int) id: number) {
+    const { user } = ctx;
+    if (!user) {
+      throw new AuthenticationError("User not found");
+    }
+    const session = await findSessionById(id);
+    if (!session) throw new Error(`Could not find session (${id})`);
+
+    if (session.hostId !== user.id) {
+      throw new Error(`Can't remove a session that isn't yours`);
+    }
+
+    return toggleSessionFull(session);
   }
 }

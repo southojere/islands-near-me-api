@@ -70,6 +70,12 @@ export class Session extends BaseEntity {
   @Column({ default: false })
   hasRedd: boolean;
 
+
+  @Field({ defaultValue: false })
+  @Column({ default: false })
+  isFull: boolean;
+
+
   @Field(() => User)
   host(@Root() parent: Session): Promise<User | undefined> {
     return findUserById(parent.hostId);

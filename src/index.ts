@@ -70,7 +70,6 @@ import "./handlers/crons";
       authChecker: ({ context }) => {
         const user = context.user;
         if (!user) return false;
-        // TODO add more custom auth logic here
         return true;
       }
     }),
