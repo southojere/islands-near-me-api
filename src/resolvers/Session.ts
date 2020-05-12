@@ -34,10 +34,6 @@ export class SessionInput {
   @Field({ defaultValue: false })
   hasLeif: boolean;
   @Field({ defaultValue: false })
-  hasCJ: boolean;
-  @Field({ defaultValue: false })
-  hasFlick: boolean;
-  @Field({ defaultValue: false })
   hasKicks: boolean;
   @Field({ defaultValue: false })
   hasSaharah: boolean;

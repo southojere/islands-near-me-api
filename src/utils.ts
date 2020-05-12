@@ -8,10 +8,6 @@ const getSessionVisitorWhere = (visitorId: number): string => {
       return "hasSaharah";
     case VISITORS.KICKS.VALUE:
       return "hasKicks";
-    case VISITORS.FLICK.VALUE:
-      return "hasFlick";
-    case VISITORS.CJ.VALUE:
-      return "hasCJ";
     case VISITORS.LEIF.VALUE:
       return "hasLeif";
     case VISITORS.REDD.VALUE:
