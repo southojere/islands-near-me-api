@@ -1,6 +1,6 @@
-# Typescript GraphQL API with basic Auth Boilerplate
+# Islands Near Me
 
-Make sure to configure your ormconfig.js file.
+Animal Crossing New Horizons web app for finding other joinable sessions.
 
 #Tech
 - TypeGraphQL
