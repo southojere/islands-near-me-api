@@ -29,6 +29,10 @@ const VISITOR_VALUE_MAP = {
   7: "REDD"
 };
 
+export const SessionRequestStatus = {
+  PENDING_RESPONSE: 0,
+  NOT_ACCEPTED: 10,
+  ACCEPTED: 20
+};
 
-
-export { VISITORS, VISITOR_VALUE_MAP};
+export { VISITORS, VISITOR_VALUE_MAP };

@@ -13,6 +13,7 @@ import { MeResolver } from "./resolvers/user/Me";
 
 import { SessionResolver } from "./resolvers/Session";
 import { FeedbackResolver } from "./resolvers/Feedback";
+import { SessionRequestResolver } from "./resolvers/SessionRequests";
 
 import { findUserById } from "./entity/queries/user";
 import config from "./config";
@@ -64,7 +65,8 @@ import "./handlers/crons";
         LoginResolver,
         MeResolver,
         SessionResolver,
-        FeedbackResolver
+        FeedbackResolver,
+        SessionRequestResolver
       ],
       validate: true,
       authChecker: ({ context }) => {

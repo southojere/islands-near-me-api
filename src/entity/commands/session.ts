@@ -28,7 +28,8 @@ const createSession = async (userId: number, input: SessionInput) => {
     hasLeif: input.hasLeif,
     hasSaharah: input.hasSaharah,
     hasRedd: input.hasRedd,
-    user: user
+    user: user,
+    isPrivate: input.isPrivate,
   }).save();
 
   user.session = newSession;

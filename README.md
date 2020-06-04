@@ -4,6 +4,10 @@ Animal Crossing New Horizons web app for finding other joinable sessions.
 
 Board: https://trello.com/b/JMMPCFdD/islandnearme
 
+# Running
+
+1) yarn
+2) yarn start:dev
 
 # Tech
 - TypeGraphQL

@@ -5,11 +5,13 @@ import {
   BaseEntity,
   CreateDateColumn,
   OneToOne,
-  JoinColumn
+  JoinColumn,
+  OneToMany
 } from "typeorm";
 import { ObjectType, Field, ID, Root } from "type-graphql";
 import { findUserById } from "./queries/user";
 import { User } from "./User";
+import { SessionRequest } from "./SessionRequest";
 
 @Entity()
 @ObjectType()
@@ -66,10 +68,23 @@ export class Session extends BaseEntity {
   @Column({ default: false })
   isFull: boolean;
 
+  // Indicates with this sessions dodo code is hidden from public view.
+  @Field({ defaultValue: false })
+  @Column({ default: false })
+  isPrivate: boolean;
+
   @Field(() => User)
   host(@Root() parent: Session): Promise<User | undefined> {
     return findUserById(parent.hostId);
   }
+
+  @Field(() => [SessionRequest])
+  @OneToMany(
+    () => SessionRequest,
+    sessionRequest => sessionRequest.session,
+    { onDelete: "CASCADE", eager: true }
+  )
+  sessionRequests: SessionRequest[];
 
   @CreateDateColumn()
   @Field()

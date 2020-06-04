@@ -1,4 +1,4 @@
-import { VISITORS } from "./constants";
+import { VISITORS, SessionRequestStatus } from "./constants";
 
 const getSessionVisitorWhere = (visitorId: number): string => {
   switch (visitorId) {
@@ -16,4 +16,17 @@ const getSessionVisitorWhere = (visitorId: number): string => {
   return "";
 };
 
-export { getSessionVisitorWhere };
+const statusText = (status: any) => {
+  switch (status) {
+    case SessionRequestStatus.PENDING_RESPONSE:
+      return "Pending Response";
+    case SessionRequestStatus.NOT_ACCEPTED:
+      return "Denied";
+    case SessionRequestStatus.ACCEPTED:
+      return "Accepted";
+    default:
+      return "Unknown Status";
+  }
+};
+
+export { getSessionVisitorWhere, statusText };

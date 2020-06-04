@@ -13,6 +13,7 @@ import { ObjectType, Field, ID, Root } from "type-graphql";
 import { IsEmail } from "class-validator";
 import { Session } from "./Session";
 import { Feedback } from "./Feedback";
+import { SessionRequest } from "./SessionRequest";
 
 @Entity()
 @ObjectType()
@@ -34,6 +35,10 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  islandName: string;
+  
   @Field()
   uppercaseEmail(@Root() parent: User): string {
     return parent.email.toUpperCase();
@@ -44,8 +49,17 @@ export class User extends BaseEntity {
   @Field({ nullable: true })
   session: Session;
 
-  @OneToMany(() => Feedback, feedback => feedback.user)
+  @OneToMany(
+    () => Feedback,
+    feedback => feedback.user
+  )
   feedback: Feedback[];
+
+  @OneToMany(
+    () => SessionRequest,
+    sessionRequest => sessionRequest.user
+  )
+  sessionRequest: SessionRequest[];
 
   @CreateDateColumn()
   @Field()

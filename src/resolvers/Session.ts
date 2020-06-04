@@ -11,9 +11,15 @@ import {
 } from "type-graphql";
 import { Session } from "../entity/Session";
 import { findAllSessions, findSessionById } from "../entity/queries/session";
-import { createSession, deleteSessionById, toggleSessionFull } from "../entity/commands/session";
+import {
+  createSession,
+  deleteSessionById,
+  toggleSessionFull
+} from "../entity/commands/session";
+import { createJoinRequest } from "../entity/commands/sessionRequest";
 import { findUserById } from "../entity/queries/user";
 import { AuthenticationError } from "apollo-server-core";
+import { findUsersSessionRequest } from "../entity/queries/sessionRequests";
 
 @InputType()
 export class SessionInput {
@@ -39,6 +45,9 @@ export class SessionInput {
   hasSaharah: boolean;
   @Field({ defaultValue: false })
   hasCeleste: boolean;
+
+  @Field({ defaultValue: false })
+  isPrivate: boolean;
 }
 
 @InputType()
@@ -79,6 +88,11 @@ class PaginatedSessions {
 
 @Resolver()
 export class SessionResolver {
+  @Query(() => Session)
+  async session(@Arg("id") id: number) {
+    return findSessionById(id);
+  }
+
   @Query(() => PaginatedSessions)
   async listSessions(@Arg("filter") filter: SessionSearchInput): Promise<any> {
     const [sessions, total] = await findAllSessions(filter);
@@ -114,7 +128,6 @@ export class SessionResolver {
     return deleteSessionById(session);
   }
 
-
   @Mutation(() => Session)
   async toggleSessionFull(@Ctx() ctx: any, @Arg("id", () => Int) id: number) {
     const { user } = ctx;
@@ -129,5 +142,37 @@ export class SessionResolver {
     }
 
     return toggleSessionFull(session);
+  }
+
+  @Mutation(() => Boolean)
+  async requestToJoin(
+    @Ctx() ctx: any,
+    @Arg("id", () => Int) session_id: number,
+    @Arg("message", { nullable: true }) message: string
+  ) {
+    const { user } = ctx;
+    if (!user) {
+      throw new AuthenticationError(
+        `Need to be logged in to request to join someone`
+      );
+    }
+    const userModel = await findUserById(user.id);
+    if (!userModel) {
+      throw new AuthenticationError("User not found - cannot join session");
+    }
+
+    const session = await findSessionById(session_id);
+    if (!session) throw new Error(`Can't find session to join`);
+
+    const usersRequests = await findUsersSessionRequest(user.id);
+    const existingRequest = usersRequests.find(
+      joinRequest => joinRequest.session.id === session_id
+    );
+    if (existingRequest) {
+      throw new Error(`You have already requested to join this session`);
+    }
+    await createJoinRequest(session, userModel, message);
+
+    return true;
   }
 }
