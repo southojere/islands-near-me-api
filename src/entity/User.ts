@@ -38,6 +38,10 @@ export class User extends BaseEntity {
   @Field({ nullable: true })
   @Column({ nullable: true })
   islandName: string;
+
+  @Field({ defaultValue: 0 })
+  @Column({ default: 0 })
+  numberOfSessionsCreated: number;
   
   @Field()
   uppercaseEmail(@Root() parent: User): string {

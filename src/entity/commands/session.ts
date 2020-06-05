@@ -17,6 +17,7 @@ const createSession = async (userId: number, input: SessionInput) => {
   const user = await findUserById(userId);
   if (!user) throw new Error(`Cant find user`);
 
+  user.numberOfSessionsCreated = user.numberOfSessionsCreated + 1;
   const newSession = await Session.create({
     hostId: userId,
     latitude: input.latitude,
